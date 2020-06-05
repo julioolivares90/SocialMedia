@@ -9,19 +9,19 @@ using Microsoft.EntityFrameworkCore;
 
 namespace SocialMedia.Infrastructure.Repositories
 {
-    public class PublicacionRepository : IPublicacionRepository
+    public class PostRepository : IPostRepository
     {
         private readonly SocialMediaContext _Context;
-        public PublicacionRepository(SocialMediaContext context)
+        public PostRepository(SocialMediaContext context)
         {
             _Context = context;
         }
 
         
 
-        public async Task<IEnumerable<Publicacion>> GetPublicaciones()
+        public async Task<IEnumerable<Post>> GetPost()
         {
-            var publicaciones = await  _Context.Publicacion.ToListAsync();
+            var publicaciones = await  _Context.Posts.ToListAsync();
 
             return publicaciones;
         }

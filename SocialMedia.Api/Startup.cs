@@ -11,7 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SocialMedia.Core.Interfaces;
 using SocialMedia.Infrastructure.Data;
+using SocialMedia.Infrastructure.Repositories;
 
 namespace SocialMedia.Api
 {
@@ -32,7 +34,9 @@ namespace SocialMedia.Api
             services.AddDbContext<SocialMediaContext>(options => {
 
                 options.UseSqlServer(Configuration.GetConnectionString("SocialMedia"));
+
             });
+            services.AddScoped<IPostRepository, PostRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

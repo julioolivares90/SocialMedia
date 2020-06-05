@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace SocialMedia.Core.Interfaces
 {
-    public interface IPublicacionRepository
+    public interface IPostRepository
     {
-        Task<IEnumerable<Publicacion>> GetPublicaciones();
+        Task<IEnumerable<Post>> GetPost();
 
     }
 }

@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SocialMedia.Core.Entities;
+using SocialMedia.Core.Interfaces;
 
 namespace SocialMedia.Api.Controllers
 {
@@ -11,18 +13,20 @@ namespace SocialMedia.Api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
         private readonly ILogger<WeatherForecastController> _logger;
+        
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
         }
-
+       
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
