@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using SocialMedia.Core.DTOs;
 using SocialMedia.Core.Entities;
 using SocialMedia.Core.Interfaces;
 
@@ -16,28 +18,46 @@ namespace SocialMedia.Api.Controllers
     {
         private readonly IPostRepository _repository;
 
-        public PostController(IPostRepository repository) 
+        private readonly IMapper _mapper;
+
+        public PostController(IPostRepository repository,IMapper mapper) 
         {
             _repository = repository;
+            _mapper = mapper;
         }
         // GET: api/<PostController>
         [HttpGet]
-        public async Task<IEnumerable<Post>> Get()
+        public async Task<IActionResult> Get()
         {
-            return await _repository.GetPost();
+
+            var posts = await _repository.GetPost();
+
+            //con linq
+            var PostsDto = _mapper.Map<IEnumerable<PostDTO>>(posts);
+
+            return Ok(PostsDto);
         }
 
         // GET api/<PostController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> Get(int id)
         {
-            return "value";
+            var post = await _repository.GetPostByID(id);
+            if (post == null)
+            {
+                return Problem(detail: "No se encontro el post solicitado",statusCode:400,title:"Post no encontrado");
+            }
+            var postDto = _mapper.Map<PostDTO>(post);
+            return Ok(postDto);
         }
 
         // POST api/<PostController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] PostDTO postDTO)
         {
+            var post = _mapper.Map<Post>(postDTO);
+            await _repository.InsertPost(post);
+            return Ok(post);
         }
 
         // PUT api/<PostController>/5
@@ -48,8 +68,10 @@ namespace SocialMedia.Api.Controllers
 
         // DELETE api/<PostController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _repository.DeletePost(id);
+            return Ok();
         }
     }
 }
